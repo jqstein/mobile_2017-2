@@ -21,15 +21,12 @@ namespace tarefa_fundamentosC
                 return (Incluir() ? true: false);
             } else if (option == "2")
             {
-                Alterar();
                 return (Alterar() ? true : false);
             } else if (option == "3")
             {
-                Listar();
                 return (Listar() ? true : false);
             } else if (option == "4")
             {
-                Excluir();
                 return (Excluir() ? true : false);
             }
             else
@@ -78,18 +75,57 @@ namespace tarefa_fundamentosC
             produto.Quantidade = Convert.ToInt32(Console.ReadLine());
             Console.Write("Valor: ");
             produto.Valor = Convert.ToString(Console.ReadLine());
-            cadastro.Add(produto.Codigo, produto);
-            return true;
+            if (cadastro.Contains(produto.Codigo))
+            {
+                cadastro[produto.Codigo] = produto;
+                return true;
+            } else
+            {
+                return false;
+            }
+            
         }
         public bool Listar()
         {
-            foreach (DictionaryEntry de in cadastro)
+            Console.Clear();
+            Console.WriteLine("══════════════════Cadastro de Produtos════════════════════");
+            Console.WriteLine(" ");
+            Console.WriteLine(" ");
+            Console.WriteLine("Listar produtos:");
+            Console.WriteLine(" ");
+            Console.WriteLine("Pressione ENTER para listar todos os produtos ou pressione ESPACO para pesquisar: ");
+            ConsoleKeyInfo key = Console.ReadKey();
+            if (key.Key == ConsoleKey.Enter)
             {
-                Produto produto = de.Value;
-                Console.Write("CÓDIGO | NOME | TIPO | QUANTIDADE | VALOR");
-                Console.Write(" | " + produto.Codigo + " | " + produto.Nome + " | " + produto.Tipo + " | " + produto.Quantidade + " | " produto.Valor + " |");
+                Console.WriteLine("CÓDIGO | NOME | TIPO | QUANTIDADE | VALOR");
+                foreach (DictionaryEntry de in cadastro)
+                {
+                    Produto produto = (Produto)de.Value;
+                    Console.WriteLine(" | " + produto.Codigo + " | " + produto.Nome + " | " + produto.Tipo + " | " + produto.Quantidade + " | " + produto.Valor + " |");
+
+                }
+                Console.ReadKey();
+                return true;
+            } else if (key.Key == ConsoleKey.Spacebar)
+            {
+                Console.WriteLine(" ");
+                Console.WriteLine("Digite o código do produto: ");
+                int codigo = Convert.ToInt32(Console.ReadLine());
+                if (cadastro.Contains(codigo))
+                {
+                    Console.WriteLine("CÓDIGO | NOME | TIPO | QUANTIDADE | VALOR");
+                    Produto produto = (Produto)cadastro[codigo];
+                    Console.WriteLine(" | " + produto.Codigo + " | " + produto.Nome + " | " + produto.Tipo + " | " + produto.Quantidade + " | " + produto.Valor + " |");
+                    Console.ReadKey();
+                    return true;
+                } else
+                {
+                    return false;
+                }
+            } else
+            {
+                return false;
             }
-            return true;
         }
         public bool Excluir()
         {
@@ -98,7 +134,7 @@ namespace tarefa_fundamentosC
             Console.WriteLine("══════════════════Cadastro de Produtos════════════════════");
             Console.WriteLine(" ");
             Console.WriteLine(" ");
-            Console.WriteLine("Alterar produto:");
+            Console.WriteLine("Excluir produto:");
             Console.WriteLine(" ");
             Console.Write("Código: ");
             codigo = Convert.ToInt32(Console.ReadLine());
